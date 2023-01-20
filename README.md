@@ -1,26 +1,24 @@
 # WaveGrad
 
-## MindSpore implementation of [WaveGrad](https://arxiv.org/abs/2009.00713), a diffusion based vocoder model for text-to-speech systems. 
+MindSpore implementation of [WaveGrad](https://arxiv.org/abs/2009.00713), a diffusion based vocoder model for text-to-speech systems. 
 
 ## Demo
 
-Generated from LJ010-0142.wav, test set, LJSpeech-1.1 ("Be this as it may, the weapon used was only an ordinary axe, which rather indicates that force, not skill, was employed."):
+[sample](results/1000000_predicted_LJ010-0142_1000.wav) Transcript: "Be this as it may, the weapon used was only an ordinary axe, which rather indicates that force, not skill, was employed.")
 
-<audio src="results/1000000_predicted_LJ010-0142_1000.wav" preload="none" controls loop></audio>
-![compare_lj](results/1000000_LJ010-0142.gif?raw=true "lj")
+![compare_lj](results/1000000_LJ010-0142.gif?raw=true "LJ010-0142")
 
-Generated from [FastSpeech2](https://github.com/ming024/FastSpeech2) ("This is a MindSpore implementation of the WaveGrad model, a diffusion based vocoder model for text to speech systems. Many thanks to Open I for computational resources!"):
+[sample](results/1000000_predicted_fs_1000.wav) Transcript: "This is a MindSpore implementation of the WaveGrad model, a diffusion based vocoder model for text to speech systems. Many thanks to Open I for computational resources!"):
 
-<audio src="results/1000000_predicted_fs_1000.wav" preload="none" controls loop></audio>
 ![compare_fs2](results/1000000_fs.gif?raw=true "fs2")
 
 ## **Dependencies**
 
 1. `pip install -r requirements.txt`
-2. Install [mindspore](https://www.mindspore.cn/install) based on your platform.
+2. Install [MindSpore](https://www.mindspore.cn/install).
 3. (Optional) Install `mpirun` for distributed training.
 
-### Generate from your data
+## Generate from your data
 
 From wav files:
 
@@ -32,13 +30,13 @@ From melspectrograms:
 
 ## Pretrained Models
 
-| Model | Dataset | Checkpoint | Total Batch Size | Num Frames | Hardware |
-| -----| ----- | -----| -----| -----| -----|
-| WaveGrad (base) | LJ-Speech1.1 | [1M steps](https://download.mindspore.cn/toolkits/mindaudio/wavegrad/model_1000000.ckpt) | 256 | 30 | 8 \times Ascend |
-| WaveGrad (base) | AiShell | [TODO]() | 256 | 30 | 8 \times Ascend |
-| FastSpeech2 | LJ-Speech1.1 | [160K steps]() | 64 | - | 8 \times GPU
+| Model | Dataset | Checkpoint | Total Batch Size | Num Frames | Num Mels | Hardware | MindSpore Version |
+| -----| ----- | -----| -----| -----| -----| -----| -----|
+| WaveGrad (base) | LJSpeech-1.1 | [1M steps](https://download.mindspore.cn/toolkits/mindaudio/wavegrad/model_1000000_v190.ckpt) | 256 | 30 | 128 | 8 $\times$ Ascend | 1.9.0 |
+| WaveGrad (base) | AiShell | [TODO]() | 256 | 30 | 128 | 8 $\times$ Ascend | 1.9.0 |
+| FastSpeech2 | LJSpeech-1.1 | [TODO]() | 64 | - | 128 | 8 $\times$ GPU | 1.9.0 |
 
-For FastSpeech2 model, we skipped the audio preprocess part and directly used this repo's preprocessed melspectrograms. We used the alignments following readme in the link.
+For FastSpeech2 model, we skipped the audio preprocess part and directly used this repo's preprocessed melspectrograms.
 
 ## Train your own model
 
@@ -63,7 +61,6 @@ Set up device information:
 ```
 export MY_DEVICE=Ascend # options: [Ascend, GPU]
 export MY_DEVICE_NUM=8
-export MY_DEVICE_ID=0
 ```
 
 Other training and model parameters can be set in `base.yaml`. 
@@ -75,6 +72,7 @@ nohup mpirun --allow-run-as-root -n $MY_DEVICE_NUM python train.py --device_targ
 
 Train on 1 card:
 ```
+export MY_DEVICE_ID=0
 nohup python train.py --device_target $MY_DEVICE --device_id $MY_DEVICE_ID --context_mode graph > train_single.log &
 ```
 
@@ -92,13 +90,13 @@ start file:
 
 Run Parameter:	
 
-`is_openi`, `'True`
+`is_openi` = `True`
 
-`is_distributed`, `'True`
+`is_distributed` = `True`
 
-`device_target`, `'Ascend`
+`device_target` = `Ascend`
 
-`context_mode`, `'graph`
+`context_mode` = `graph`
 
 ### Implementation details
 

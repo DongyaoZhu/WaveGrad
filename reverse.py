@@ -149,7 +149,7 @@ ani = FuncAnimation(
 )
 
 ani.save(
-    args.save + '/%s.gif' % old,
+    args.save + '/%d_%s.gif' % (cur_step, old),
     fps=2,
     writer='imagemagick'
 )
