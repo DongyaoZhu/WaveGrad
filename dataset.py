@@ -120,7 +120,7 @@ def create_dataset(data_path, manifest_path, batch_size, is_train=True, rank=0, 
         column_order=output_columns,
         drop_remainder=True,
         python_multiprocessing=False,
-        num_parallel_workers=8
+        num_parallel_workers=cpu_count()
     )
 
     return ds
