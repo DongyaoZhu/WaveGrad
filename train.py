@@ -122,7 +122,7 @@ def main():
     if args.is_distributed:
         init()
         ms.set_auto_parallel_context(parallel_mode=ms.ParallelMode.DATA_PARALLEL, gradients_mean=True)
-    rank = int(os.getenv('DEVICE_ID'))
+    rank = int(os.getenv('DEVICE_ID', '0'))
     group = int(os.getenv('RANK_SIZE', '1'))
     print('[info] rank: %d group: %d batch: %d' % (rank, group, hps.batch_size // group))
     ms.context.set_context(device_id=rank if args.is_distributed else args.device_id)
